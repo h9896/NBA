@@ -10,8 +10,9 @@ import requests
 import pandas as pd
 import sys
 import os
+import datetime
 
-def crawler(date, team):
+def crawler_csv(date, team):
     #Daily weather data
 #    date="20171211"
 #    team="MIA@MEM"
@@ -137,7 +138,57 @@ def crawler_TeamData(team):
     df = pd.DataFrame(tdf, columns=parameter)        
     df.to_csv(str(today.year)+str(today.month)+str(today.day)+"_"+team+".csv", index = False)
 
+
+def crawler_TeamData_nocsv(team):
+    today = datetime.date.today()
+    days = datetime.timedelta(days = 0)
+    schedule = crawler_schedule(team)
+    strmonth = {'Jan':'01','Feb':'02','Mar':'03','Apr':'04','May':'05','Jun':'06','Jul':'07','Aug':'08','Sep':'09','Oct':'10','Nov':'11','Dec':'12'}
+    nextyear = ["01","02","03","04","05","06","07"]
+    newschedule=[]
+    tdf = []
+    for i in schedule:
+        mon = i[0][0:3]
+        mon = strmonth[mon]
+        day = i[0][-2:]
+        temp = i[1]
+        if ' ' in day:
+            day = day.replace(' ', '0')
+        if mon in nextyear:
+            d = '2018'+mon+day
+        else:
+            d = '2017'+mon+day
+        if temp[0] == '@':
+            t = team+temp
+        else:
+            t = temp+'@'+team
+        newschedule.append([d,t])
+    for k in newschedule:
+        h = today - datetime.date(int(k[0][0:4]),int(k[0][4:6]),int(k[0][6:]))
+        if h >= days:
+            try:
+                tv = crawler_nocsv(k[0], k[1])
+                tdf.append(tv)
+            except:
+                pass
+    return tdf
+
+def crawler():
+    today = datetime.date.today()
+    fullname = ["ATL","BOS","BKN","CHA","CHI","CLE","DAL","DEN","DET","GS","HOU","IND","LAC","LAL","MEM","MIA","MIL","MIN","NO","NY","OKC","ORL","PHI","PHO","POR","SAC","SA","TOR","UTA","WAS"]
+    df = []
+    for i in fullname:
+        tdf = crawler_TeamData_nocsv(i)
+        df = df + tdf
+    parameter = ["GUESTMIN","GUESTPTS","GUESTREB","GUESTAST","GUESTSTL","GUESTBLK","GUESTTO","GUESTPF","GUESTFG","GUESTFGTotal","GUEST3PT","GUEST3PTTotal","GUESTFT","GUESTFTTotal","GUESTFPTS","HOMEMIN","HOMEPTS","HOMEREB","HOMEAST","HOMESTL","HOMEBLK","HOMETO","HOMEPF","HOMEFG","HOMEFGTotal","HOME3PT","HOME3PTTotal","HOMEFT","HOMEFTTotal","HOMEFPTS"]
+    df = pd.DataFrame(df, columns=parameter)        
+    df.to_csv(str(today.year)+str(today.month)+str(today.day)+".csv", index = False)
+    
+
+#if __name__ == '__main__':
+#    team = str(sys.argv[1])
+#    print(team)
+#    crawler_TeamData(team)
+    
 if __name__ == '__main__':
-    team = str(sys.argv[1])
-    print(team)
-    crawler_TeamData(team)
+    crawler()
