@@ -7,14 +7,17 @@ Created on Tue Dec 12 20:18:34 2017
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
-import sys
-import os
+#import sys
+#import os
 import datetime
 class NBA_crawler():
-    def crawler_csv(date, team):
-        #Daily weather data
-    #    date="20171211"
-    #    team="MIA@MEM"
+    
+###---------------------------------------------------------------------------------------------------------------------------------------------------###
+    
+    def game2csv(date, team):
+#        Daily weather data
+#        date="20171211"
+#        team="MIA@MEM"
         url ="https://www.cbssports.com/nba/gametracker/boxscore/NBA_{0}_{1}/".format(date, team)
         resp = requests.get(url)
         soup = BeautifulSoup(resp.text, 'lxml')
@@ -43,11 +46,13 @@ class NBA_crawler():
         tv = [value]    
         file = pd.DataFrame(tv, columns=parameter)
         file.to_csv(date+"_"+team+".csv", index = False)
-    
-    def crawler_nocsv(date, team):
-        #Daily weather data
-    #    date="20171211"
-    #    team="MIA@MEM"
+        
+###---------------------------------------------------------------------------------------------------------------------------------------------------###
+        
+    def game(date, team):
+#        Daily weather data
+#        date="20171211"
+#        team="MIA@MEM"
         url ="https://www.cbssports.com/nba/gametracker/boxscore/NBA_{0}_{1}/".format(date, team)
         resp = requests.get(url)
         soup = BeautifulSoup(resp.text, 'lxml')
@@ -73,8 +78,10 @@ class NBA_crawler():
                 value.append(int(k))
             value.append(int(dic[i][-2]))
         return value
-        
-    def crawler_schedule(team):
+    
+###---------------------------------------------------------------------------------------------------------------------------------------------------###
+
+    def schedule(team):
         #team="SA"
         fullname = {"ATL":"atlanta-hawks","BOS":"boston-celtics","BKN":"brooklyn-nets","CHA":"charlotte-hornets","CHI":"chicago-bulls","CLE":"cleveland-cavaliers","DAL":"dallas-mavericks","DEN":"denver-nuggets","DET":"detroit-pistons","GS":"golden-state-warriors","HOU":"houston-rockets","IND":"indiana-pacers","LAC":"los-angeles-clippers","LAL":"los-angeles-lakers","MEM":"memphis-grizzlies","MIA":"miami-heat","MIL":"milwaukee-bucks","MIN":"minnesota-timberwolves","NO":"new-orleans-pelicans","NY":"new-york-knicks","OKC":"oklahoma-city-thunder","ORL":"orlando-magic","PHI":"philadelphia-76ers","PHO":"phoenix-suns","POR":"portland-trail-blazers","SAC":"sacramento-kings","SA":"san-antonio-spurs","TOR":"toronto-raptors","UTA":"utah-jazz","WAS":"washington-wizards"}
         url = "https://www.cbssports.com/nba/teams/schedule/{0}/{1}/".format(team,fullname[team])
@@ -99,11 +106,14 @@ class NBA_crawler():
                 p.append(strtmp)
             schedule.append(p)
         return schedule
-    def tenday_crawler(team, aaa):
+    
+###---------------------------------------------------------------------------------------------------------------------------------------------------###
+        
+    def tenday(team, aaa):
         today = datetime.date.today()
         days = datetime.timedelta(days = 0)
         tendays = datetime.timedelta(days = 10)
-        schedule = crawler_schedule(team)
+        schedule = NBA_crawler.schedule(team)
         strmonth = {'Jan':'01','Feb':'02','Mar':'03','Apr':'04','May':'05','Jun':'06','Jul':'07','Aug':'08','Sep':'09','Oct':'10','Nov':'11','Dec':'12'}
         nextyear = ["01","02","03","04","05","06","07"]
         newschedule=[]
@@ -130,10 +140,10 @@ class NBA_crawler():
                 te = k[1].split("@")
                 try:
                     if te[0] == team:
-                        tv = crawler_nocsv(k[0], k[1])
+                        tv = NBA_crawler.game(k[0], k[1])
                         tdf.append(tv[0:15])
                     else:
-                        tv = crawler_nocsv(k[0], k[1])
+                        tv = NBA_crawler.game(k[0], k[1])
                         tdf.append(tv[15:-1])
                 except:
                     pass
@@ -150,11 +160,13 @@ class NBA_crawler():
         filename = aaa +"_teamtenday.txt"
         with open(filename, "w") as f:
             f.write(df)
-        
-    def crawler_TeamData(team):
+            
+###---------------------------------------------------------------------------------------------------------------------------------------------------### 
+            
+    def TeamData2csv(team):
         today = datetime.date.today()
         days = datetime.timedelta(days = 0)
-        schedule = crawler_schedule(team)
+        schedule = NBA_crawler.schedule(team)
         strmonth = {'Jan':'01','Feb':'02','Mar':'03','Apr':'04','May':'05','Jun':'06','Jul':'07','Aug':'08','Sep':'09','Oct':'10','Nov':'11','Dec':'12'}
         nextyear = ["01","02","03","04","05","06","07"]
         newschedule=[]
@@ -179,7 +191,7 @@ class NBA_crawler():
             h = today - datetime.date(int(k[0][0:4]),int(k[0][4:6]),int(k[0][6:]))
             if h >= days:
                 try:
-                    tv = crawler_nocsv(k[0], k[1])
+                    tv = NBA_crawler.game(k[0], k[1])
                     tdf.append(tv)
                 except:
                     pass
@@ -187,12 +199,13 @@ class NBA_crawler():
         parameter = ["GUESTMIN","GUESTPTS","GUESTREB","GUESTAST","GUESTSTL","GUESTBLK","GUESTTO","GUESTPF","GUESTFG","GUESTFGTotal","GUEST3PT","GUEST3PTTotal","GUESTFT","GUESTFTTotal","GUESTFPTS","HOMEMIN","HOMEPTS","HOMEREB","HOMEAST","HOMESTL","HOMEBLK","HOMETO","HOMEPF","HOMEFG","HOMEFGTotal","HOME3PT","HOME3PTTotal","HOMEFT","HOMEFTTotal","HOMEFPTS"]
         df = pd.DataFrame(tdf, columns=parameter)        
         df.to_csv(str(today.year)+str(today.month)+str(today.day)+"_"+team+".csv", index = False)
+        
+###---------------------------------------------------------------------------------------------------------------------------------------------------###    
     
-    
-    def crawler_TeamData_nocsv(team):
+    def TeamData(team):
         today = datetime.date.today()
         days = datetime.timedelta(days = 0)
-        schedule = crawler_schedule(team)
+        schedule = NBA_crawler.schedule(team)
         strmonth = {'Jan':'01','Feb':'02','Mar':'03','Apr':'04','May':'05','Jun':'06','Jul':'07','Aug':'08','Sep':'09','Oct':'10','Nov':'11','Dec':'12'}
         nextyear = ["01","02","03","04","05","06","07"]
         newschedule=[]
@@ -217,28 +230,31 @@ class NBA_crawler():
             h = today - datetime.date(int(k[0][0:4]),int(k[0][4:6]),int(k[0][6:]))
             if h >= days:
                 try:
-                    tv = crawler_nocsv(k[0], k[1])
+                    tv = NBA_crawler.game(k[0], k[1])
                     tdf.append(tv)
                 except:
                     pass
         return tdf
     
+###---------------------------------------------------------------------------------------------------------------------------------------------------###    
+
     def crawler():
         today = datetime.date.today()
         fullname = ["ATL","BOS","BKN","CHA","CHI","CLE","DAL","DEN","DET","GS","HOU","IND","LAC","LAL","MEM","MIA","MIL","MIN","NO","NY","OKC","ORL","PHI","PHO","POR","SAC","SA","TOR","UTA","WAS"]
         df = []
         for i in fullname:
-            tdf = crawler_TeamData_nocsv(i)
+            tdf = NBA_crawler.TeamData(i)
             df = df + tdf
         parameter = ["GUESTMIN","GUESTPTS","GUESTREB","GUESTAST","GUESTSTL","GUESTBLK","GUESTTO","GUESTPF","GUESTFG","GUESTFGTotal","GUEST3PT","GUEST3PTTotal","GUESTFT","GUESTFTTotal","GUESTFPTS","HOMEMIN","HOMEPTS","HOMEREB","HOMEAST","HOMESTL","HOMEBLK","HOMETO","HOMEPF","HOMEFG","HOMEFGTotal","HOME3PT","HOME3PTTotal","HOMEFT","HOMEFTTotal","HOMEFPTS"]
         df = pd.DataFrame(df, columns=parameter)
         df.drop(["GUESTMIN","GUESTFPTS","HOMEMIN","HOMEFPTS"], axis=1)        
         df.to_csv(str(today.year)+str(today.month)+str(today.day)+".csv", index = False)
         
-    
-    def crawler_stats(team, aaa):
-    #    https://www.cbssports.com/nba/teams/stats/SA/san-antonio-spur
-    #    team="SA"
+###---------------------------------------------------------------------------------------------------------------------------------------------------###
+        
+    def stats(team, aaa):
+#        https://www.cbssports.com/nba/teams/stats/SA/san-antonio-spur
+#        team="SA"
         fullname = {"ATL":"atlanta-hawks","BOS":"boston-celtics","BKN":"brooklyn-nets","CHA":"charlotte-hornets","CHI":"chicago-bulls","CLE":"cleveland-cavaliers","DAL":"dallas-mavericks","DEN":"denver-nuggets","DET":"detroit-pistons","GS":"golden-state-warriors","HOU":"houston-rockets","IND":"indiana-pacers","LAC":"los-angeles-clippers","LAL":"los-angeles-lakers","MEM":"memphis-grizzlies","MIA":"miami-heat","MIL":"milwaukee-bucks","MIN":"minnesota-timberwolves","NO":"new-orleans-pelicans","NY":"new-york-knicks","OKC":"oklahoma-city-thunder","ORL":"orlando-magic","PHI":"philadelphia-76ers","PHO":"phoenix-suns","POR":"portland-trail-blazers","SAC":"sacramento-kings","SA":"san-antonio-spurs","TOR":"toronto-raptors","UTA":"utah-jazz","WAS":"washington-wizards"}
         
         url = "https://www.cbssports.com/nba/teams/stats/{0}/{1}/".format(team,fullname[team])
@@ -298,11 +314,8 @@ class NBA_crawler():
         filename = aaa + "_teamstat.txt"
         with open(filename, "w") as f:
             f.write(file)
+            
+###---------------------------------------------------------------------------------------------------------------------------------------------------###
 
-#if __name__ == '__main__':
-#    team = str(sys.argv[1])
-#    print(team)
-#    crawler_TeamData(team)
-    
 if __name__ == '__main__':
-    tenday_crawler("SA")
+    NBA_crawler.stats("SA")
