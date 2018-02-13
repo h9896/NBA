@@ -18,6 +18,7 @@ if __name__ ==  '__main__':
     re = float(input("%: "))*0.01
     print("Start")
     eth=cex.price("ETH")
+    sellP=0
     
     price=[]
     
@@ -44,4 +45,6 @@ if __name__ ==  '__main__':
                 del price[0]
         else:
             price=[]
+        if sellP>0:
+            break;
         time.sleep(600)
