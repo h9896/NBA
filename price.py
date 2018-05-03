@@ -26,9 +26,9 @@ def us():
             b_btc = (float(i[1])-5871.263)*0.04570521
             h_btc = (float(i[1])/5871.263)
         elif i[0] == 'ETH/USD':
-            eth = 0.97222000*float(i[1])
-            b_eth = (float(i[1])-584.9943)*0.97222000
-            h_eth = (float(i[1])/584.9943)
+            eth = 1.21222000*float(i[1])
+            b_eth = (float(i[1])-595.5120)*1.21222000
+            h_eth = (float(i[1])/595.5120)
         elif i[0] == 'BCH/USD':
             bch = 0.07449677*float(i[1])
             b_bch = (float(i[1])-3709.556)*0.07449677
