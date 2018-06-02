@@ -22,13 +22,13 @@ def us():
         lis.append(li)
     for i in lis:
         if i[0] == 'BTC/USD':
-            btc = 0.04570521*float(i[1])
-            b_btc = (float(i[1])-5871.263)*0.04570521
-            h_btc = (float(i[1])/5871.263)
+            btc = 0.05370521*float(i[1])
+            b_btc = (float(i[1])-6266.865102)*0.05370521
+            h_btc = (float(i[1])/6266.865102)
         elif i[0] == 'ETH/USD':
-            eth = 1.36222000*float(i[1])
-            b_eth = (float(i[1])-602.0168222)*1.36222000
-            h_eth = (float(i[1])/602.0168222)
+            eth = 2.26722000*float(i[1])
+            b_eth = (float(i[1])-618.8223445)*2.26722000
+            h_eth = (float(i[1])/618.8223445)
         elif i[0] == 'BCH/USD':
             bch = 0.07449677*float(i[1])
             b_bch = (float(i[1])-3709.556)*0.07449677
@@ -38,9 +38,9 @@ def us():
             b_xrp = (float(i[1])-1.230573)*260.000000
             h_xrp = (float(i[1])/1.230573)
         elif i[0] == 'ZEC/USD':
-            zec = 0.62609799*float(i[1])
-            b_zec = (float(i[1])-575.7732)*0.62609799
-            h_zec = (float(i[1])/575.7732)
+            zec = 0.63993760*float(i[1])
+            b_zec = (float(i[1])-563.3209044)*0.63993760
+            h_zec = (float(i[1])/563.3209044)
     total = btc+eth+bch+xrp+zec
     b_total = b_btc+b_eth+b_bch+b_xrp+b_zec
     
