@@ -27,8 +27,8 @@ def us():
             h_btc = (float(i[1])/6266.865102)
         elif i[0] == 'ETH/USD':
             eth = 2.26722000*float(i[1])
-            b_eth = (float(i[1])-618.8223445)*2.26722000
-            h_eth = (float(i[1])/618.8223445)
+            b_eth = (float(i[1])-603.1431086)* 2.66022000
+            h_eth = (float(i[1])/603.1431086)
         elif i[0] == 'BCH/USD':
             bch = 0.07449677*float(i[1])
             b_bch = (float(i[1])-3709.556)*0.07449677
@@ -39,8 +39,8 @@ def us():
             h_xrp = (float(i[1])/1.230573)
         elif i[0] == 'ZEC/USD':
             zec = 0.63993760*float(i[1])
-            b_zec = (float(i[1])-563.3209044)*0.63993760
-            h_zec = (float(i[1])/563.3209044)
+            b_zec = (float(i[1])-544.5940901)*0.66194298
+            h_zec = (float(i[1])/544.5940901)
     total = btc+eth+bch+xrp+zec
     b_total = b_btc+b_eth+b_bch+b_xrp+b_zec
     
